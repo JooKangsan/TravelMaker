@@ -8,8 +8,7 @@ class APIError extends Error {
     message: string,
     public status: number,
   ) {
-    super(message);
-    this.name = "";
+    super(message); // Error 이름을 명시적으로 설정
   }
 }
 
@@ -27,9 +26,11 @@ export const handleApiError = (error: unknown) => {
   // API 응답 에러인 경우
   if (error && typeof error === "object" && "status" in error) {
     const apiError = error as { status: number; data?: ErrorResponseData };
+
+    // 서버에서 전달된 메시지가 있으면 그 메시지를 우선 사용
     const errorMessage =
       apiError.data?.message || ErrorMessages[apiError.status] || ErrorMessages.default;
-
+    // APIError 인스턴스를 생성할 때 메시지만 전달
     throw new APIError(errorMessage, apiError.status);
   }
 
@@ -39,7 +40,7 @@ export const handleApiError = (error: unknown) => {
   }
 
   // 기타 예상치 못한 에러
-  throw new APIError("서버에서 네트워크가 오지 않습니다.", 500);
+  throw new APIError("서버와의 통신 중 오류가 발생했습니다.", 500);
 };
 
 export { APIError };

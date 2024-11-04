@@ -19,11 +19,7 @@ const userAPI = {
   },
   // 프로필 이미지 url 생성
   postUsersImage: async (formData: FormData) => {
-    const data = await fetchInstance.post<postUsersImageRes>("/users/me/image", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const data = await fetchInstance.post<postUsersImageRes>("/users/me/image", formData);
     return data;
   },
 };
